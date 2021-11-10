@@ -10,6 +10,8 @@ import horizontalGridFragmentShader from './shaders/horizontalGrid/fragment.glsl
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js';
 
+import * as UI from './ui.js';
+
 
 let controller1, controller2;
 			let controllerGrip1, controllerGrip2;
@@ -69,10 +71,10 @@ const sizes = {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-camera.position.x = -5.0;
-camera.position.y = 3.0;
-camera.position.z = 3.0
-camera.lookAt(0,0,0);
+camera.position.x = 0.0;
+camera.position.y = 0.0;
+camera.position.z = 2.5
+camera.lookAt(0,1,0);
 // camera.position.x = 3
 scene.add(camera);
 
@@ -86,7 +88,8 @@ controls.enableDamping = true;
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
-    canvas: canvas
+    canvas: canvas,
+    alpha: true,
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -117,6 +120,12 @@ scene.add( controllerGrip1 );
 controllerGrip2 = renderer.xr.getControllerGrip( 1 );
 controllerGrip2.add( controllerModelFactory.createControllerModel( controllerGrip2 ) );
 scene.add( controllerGrip2 );
+
+/**
+ * UI Text Box
+ */
+const textBox = new UI.TextBox("This is a test of the UI system's ability to display text on a plane.");
+scene.add(textBox.mesh);
 
 
 
