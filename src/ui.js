@@ -90,12 +90,16 @@ class TextBox {
         this.context.font = this.config.font.size + 'px ' + this.config.font.family;
         this.context.fillStyle = this.config.font.color; 
 
-       // Determine Word Wrap
-       let lineLength = canvas.width - this.config.padding.left - this.config.padding.right;
-       this.lines = wordWrap(lineLength, this.content, this.context);
+       // Determine Word Wrap and Place Text
+        let boundingBox = {
+            top: this.context.measureText('M').width + this.config.padding.top, 
+            bottom: canvas.height - this.config.padding.bottom,
+            left: this.config.padding.left,
+            right: canvas.width - this.config.padding.right 
+        }
 
-        // Place Text
-        placeText(canvas, this.context, this.lines, this.config.padding, this.config.lineSpacing, this.config.header.text);
+        this.lines = wordWrap(boundingBox, this.content, this.context);
+        placeText(canvas, this.context, this.lines, boundingBox, this.config.lineSpacing);
 
         this.context.save();
 
@@ -128,7 +132,8 @@ function placeHeader(canvas, context, header, headerConfig, font, padding) {
 }
 
 
-function wordWrap(lineLength, content, context) {
+function wordWrap(boundingBox, content, context) {
+    let lineLength = boundingBox.right - boundingBox.left;
     let lines = [];
     if (lineLength > context.measureText(content).width) lines[0] = content;
     else {
@@ -148,16 +153,16 @@ function wordWrap(lineLength, content, context) {
  }
 
 
-function placeText(canvas, context, lineArray, padding, lineSpacing) {
+function placeText(canvas, context, lineArray, boundingBox, lineSpacing) {
     for (let iter = 0; iter < lineArray.length; iter++) {
 
         let fontHeight = context.measureText('M').width;
 
-        // Offset Lines from Top: padding + height of previous lines + line spacing + height of header
-        let lineHeight = padding.top + iter * fontHeight + ((iter + 1) * fontHeight * lineSpacing) + fontHeight;
+        // Offset Lines from Top: top of bounding box + height of previous lines + line spacing
+        let lineHeight = boundingBox.top + iter * fontHeight + ((iter + 1) * fontHeight * lineSpacing);
 
-        if (lineHeight < canvas.height - padding.bottom - fontHeight)
-            context.fillText(lineArray[iter], 10 + padding.left, lineHeight);
+        if (lineHeight < boundingBox.bottom - fontHeight)
+            context.fillText(lineArray[iter], boundingBox.left, lineHeight);
 
     }
 }
