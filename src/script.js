@@ -124,8 +124,13 @@ scene.add( controllerGrip2 );
 /**
  * UI Text Box
  */
-const textBox = new UI.TextBox("Header", "This is what a text box will look like.");
-scene.add(textBox.mesh);
+const textBoxCenter = new UI.TextBox("Header", "This is what a text box will look like.");
+const textBoxLeft = new UI.TextBox("Header", "This is a text box rotated 45 degrees.", {position: {x: -2}, rotation: {y: 45}});
+const textBoxRight = new UI.TextBox("Header", "This is a text box rotated 315 degrees.", {position: {x: 2}, rotation: {y: 315}});
+
+scene.add(textBoxCenter.mesh);
+scene.add(textBoxLeft.mesh);
+scene.add(textBoxRight.mesh);
 
 
 
