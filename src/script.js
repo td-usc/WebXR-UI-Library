@@ -124,7 +124,7 @@ scene.add( controllerGrip2 );
 /**
  * UI Text Box
  */
-const textBox = new UI.TextBox("This is a test of the UI system's ability to display text on a plane.");
+const textBox = new UI.TextBox("Header", "This is a test of the UI system's ability to display text on a plane.");
 scene.add(textBox.mesh);
 
 
